@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Syntax check
+        run: python -m py_compile src/server.py src/parser.py src/commands.py src/store.py
+      - name: Start server and test
+        run: |
+          python -m src.server &
+          sleep 2
+          python -c "
+          import socket
+          s = socket.socket()
+          s.connect(('127.0.0.1', 6379))
+          s.sendall(b'PING\r\n')
+          print(s.recv(1024).decode())
+          s.close()
+          "

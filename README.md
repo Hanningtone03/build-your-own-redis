@@ -12,3 +12,26 @@ Redis is an in-memory key-value store that communicates over TCP using a protoco
 - Handles multiple clients simultaneously using threads
 
 ## Project structure
+## Running locally
+
+```bash
+python -m src.server
+```
+
+## Supported commands
+
+| Command | Example | Description |
+|---------|---------|-------------|
+| PING | `PING` | Check if server is alive |
+| SET | `SET name John` | Store a value |
+| SET with TTL | `SET name John EX 10` | Store a value that expires in 10 seconds |
+| GET | `GET name` | Retrieve a value |
+| DEL | `DEL name` | Delete a key |
+| EXISTS | `EXISTS name` | Check if a key exists |
+
+## Tech
+
+- Python 3
+- `socket` module (raw TCP)
+- `threading` module (concurrent clients)
+- No external dependencies
