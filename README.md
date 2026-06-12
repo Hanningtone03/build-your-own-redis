@@ -1,17 +1,23 @@
+![CI](https://github.com/Hanningtone03/build-your-own-redis/actions/workflows/ci.yml/badge.svg)
+
 # Build Your Own Redis
 
-A Redis clone built from scratch in Python using raw TCP sockets and the RESP protocol — no Redis libraries used.
+A Redis clone in Python using raw TCP sockets and the RESP protocol; no Redis libraries.
 
 ## How it works
 
-Redis is an in-memory key-value store that communicates over TCP using a protocol called RESP. This project implements that from scratch:
-
-- Opens a raw TCP socket on port 6379 (same port as real Redis)
-- Parses incoming RESP protocol messages manually
-- Stores key-value pairs in memory with optional TTL expiry
-- Handles multiple clients simultaneously using threads
+A TCP server on port 6379 that reads RESP-encoded commands, executes them against an in-memory dictionary, and writes RESP responses back. Keys can expire via TTL. Multiple clients handled via threads.
 
 ## Project structure
+
+```
+src/
+├── server.py
+├── parser.py
+├── commands.py
+└── store.py
+```
+
 ## Running locally
 
 ```bash
@@ -20,18 +26,17 @@ python -m src.server
 
 ## Supported commands
 
-| Command | Example | Description |
-|---------|---------|-------------|
-| PING | `PING` | Check if server is alive |
-| SET | `SET name John` | Store a value |
-| SET with TTL | `SET name John EX 10` | Store a value that expires in 10 seconds |
-| GET | `GET name` | Retrieve a value |
-| DEL | `DEL name` | Delete a key |
-| EXISTS | `EXISTS name` | Check if a key exists |
+| Command | Example |
+|---------|---------|
+| PING | `PING` |
+| SET | `SET name John` |
+| SET with TTL | `SET name John EX 10` |
+| GET | `GET name` |
+| DEL | `DEL name` |
+| EXISTS | `EXISTS name` |
 
 ## Tech
 
 - Python 3
-- `socket` module (raw TCP)
-- `threading` module (concurrent clients)
+- `socket`, `threading` modules
 - No external dependencies
